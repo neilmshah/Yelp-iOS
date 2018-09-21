@@ -8,10 +8,12 @@
 
 import UIKit
 
-class BusinessesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class BusinessesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
     
     @IBOutlet weak var tableView: UITableView!
     var businesses: [Business]!
+    var searchBar = UISearchBar()
+    var allBusinesses: [Business]!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,9 +23,15 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 120
         
+        //searchBar = UISearchBar()
+        searchBar.delegate = self
+        searchBar.sizeToFit()
+        navigationItem.titleView = searchBar
+        
         Business.searchWithTerm(term: "Thai", completion: { (businesses: [Business]?, error: Error?) -> Void in
             
                 self.businesses = businesses
+                self.allBusinesses = businesses
                 self.tableView.reloadData()
                 if let businesses = businesses {
                     for business in businesses {
@@ -31,7 +39,6 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
                         print(business.address!)
                     }
                 }
-            
             }
         )
         
@@ -68,14 +75,27 @@ class BusinessesViewController: UIViewController, UITableViewDelegate, UITableVi
         return cell
     }
     
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-     // Get the new view controller using segue.destinationViewController.
-     // Pass the selected object to the new view controller.
-     }
-     */
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        businesses = searchText.isEmpty ? businesses : allBusinesses.filter
+            { (item: Business) -> Bool in
+            
+                let i = item.name
+                return i!.range(of: searchText, options: .caseInsensitive, range: nil, locale: nil) != nil
+        }
+        
+        tableView.reloadData()
+    }
+    
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        self.searchBar.showsCancelButton = true
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.showsCancelButton = false
+        searchBar.text = ""
+        businesses = self.allBusinesses
+        tableView.reloadData()
+        searchBar.resignFirstResponder()
+    }
     
 }
