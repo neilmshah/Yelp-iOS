@@ -47,7 +47,10 @@
                                                     </constraints>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="1. Basil Canteen" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tOn-XK-xD2">
-                                                    <rect key="frame" x="81" y="8" width="238.5" height="18"/>
+                                                    <rect key="frame" x="81" y="8" width="237" height="18"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="237" id="EFp-gG-jdw"/>
+                                                    </constraints>
                                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
